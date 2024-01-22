@@ -6,14 +6,30 @@
     "build": "umi build",
     "postinstall": "umi setup",
     "setup": "umi setup",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "prepare": "husky install"
   },
   "dependencies": {
+    "antd-mobile": "^5.34.0",
+    "antd-mobile-icons": "^0.3.0",
     "umi": "^4.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
+    "@umijs/lint": "^4.1.1",
+    "eslint": "^8.56.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^15.2.0",
+    "postcss-px-to-viewport": "^1.1.1",
+    "prettier": "3.2.4",
+    "stylelint": "^14",
     "typescript": "^5.0.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,less}": [
+      "umi lint",
+      "prettier --write --ignore-unknown"
+    ]
   }
 }
