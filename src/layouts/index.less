@@ -1,10 +1,26 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .navs {
-  ul {
-    padding: 0;
-    list-style: none;
-    display: flex;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  // ul {
+  //   padding: 0;
+  //   list-style: none;
+  //   display: flex;
+  // }
+  // li {
+  //   margin-right: 1em;
+  // }
+
+  .body_content {
+    flex: 1;
   }
-  li {
-    margin-right: 1em;
+  .tabbar {
+    flex: 0;
+    border-top: solid 1px var(--adm-color-border);
   }
 }

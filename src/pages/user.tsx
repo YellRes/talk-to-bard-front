@@ -1,3 +1,3 @@
 export default function UserPage() {
-  return <div></div>;
+  return <div>暂无内容~~</div>;
 }
