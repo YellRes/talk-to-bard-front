@@ -1,36 +1,10 @@
 import { ProChat } from "@ant-design/pro-chat";
-
 import { multiChatParams, multipleChatRequest } from "../util/request";
 
 export default function HomePage() {
-  // const [chatContent] = useState<Array<{text: string}>>([])
-
-  // hooks 函数
-  // const { run } = useRequest(() => {
-  //   return request(REQUEST_URL!, {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     data: {
-  //       contents: [
-  //         {
-  //           parts: chatContents
-  //         }
-  //       ]
-  //     }
-  //   })
-  // }, {
-  //   manual: true,
-  //   onSuccess: (result) => {
-
-  //   }
-  // })
-
   const requestBard = async (
     messages: Array<{ content: string; [x: string]: string }>,
   ) => {
-    console.log(messages, "message");
     // 获取历史消息和本次消息
     const multiChatContent = (messages || []).reduce(
       (pre: multiChatParams, cur, index) => {
@@ -55,24 +29,6 @@ export default function HomePage() {
     );
 
     try {
-      // let res = await request(REQUEST_URL!, {
-      //   method: 'POST',
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   data: {
-      //     contents: [
-      //       {
-      //         parts: chatContents
-      //       }
-      //     ]
-      //   }
-      // })
-
-      // return res.candidates.map((candidate: any) => {
-      //   return candidate.content.parts.map((part: any) => part.text)
-      // }).filter(Boolean).join('\n')
-
       let res = await multipleChatRequest(multiChatContent);
       const encoder = new TextEncoder();
       const readableStream = new ReadableStream({
@@ -98,7 +54,7 @@ export default function HomePage() {
 
   return (
     <ProChat
-      helloMessage={"新的一天，有什么有什么我可以帮你的~~"}
+      helloMessage={"新的一天，有什么我可以帮你的~~"}
       displayMode={"docs"}
       request={requestBard}
     />

@@ -9,11 +9,6 @@ export default async function request(params: any) {
   const prompt = params;
   const result = await model.generateContentStream(prompt);
 
-  // let text = '';
-  // for await (const chunk of result.stream) {
-  //     const chunkText = chunk.text();
-  //     text += chunkText;
-  // }
   return result.stream;
 }
 
