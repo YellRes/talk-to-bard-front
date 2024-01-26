@@ -1,4 +1,5 @@
 import { defineConfig } from "umi";
+import path from "path";
 
 export default defineConfig({
   npmClient: "pnpm",
@@ -31,6 +32,21 @@ export default defineConfig({
       landscapeWidth: 568,
     }),
   ],
+  chainWebpack(config: any) {
+    // 用svg-sprite-loader制作 svg-symbol，让我们可以直接使用 svg-use。
+    config.module
+      .rule("svg")
+      .exclude.add(path.resolve(__dirname, "./src/assets/svg")) // 排除icons目录
+      .end();
+
+    config.module
+      .rule("svg-sprite-loader")
+      .test(/\.svg$/i)
+      .include.add(path.resolve(__dirname, "./src/assets/svg"))
+      .end()
+      .use("svg-sprite-loader")
+      .loader("svg-sprite-loader");
+  },
   // 环境变量
   define: {
     "process.env": {
