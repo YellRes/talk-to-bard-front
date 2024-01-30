@@ -6,6 +6,7 @@ export default defineConfig({
     { path: "/", redirect: "/index" },
     { path: "/index", component: "@/pages/index" },
     { path: "/user", component: "@/pages/user" },
+    { path: "/login", component: "@/pages/login", layout: false },
   ],
 
   plugins: ["@umijs/plugins/dist/request", "@umijs/plugins/dist/tailwindcss"],

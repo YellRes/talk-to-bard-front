@@ -1,13 +1,12 @@
 // node_modules库
-import classnames from "classnames";
 import React, { useState } from "react";
+import { history } from "umi";
+import classnames from "classnames";
 import { Button, Tabs, Card, List } from "antd-mobile";
 
 // import { ReactComponent as AiSvg } from '@/assets/svg/ai.svg'
 import styles from "./index.less";
 import type { IUser } from "@/types/user.d.ts";
-
-// const TABS = ['历史记录']
 
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState<Partial<IUser>>({});
@@ -28,12 +27,16 @@ export default function UserPage() {
           />
         </div>
         <div className="text-2xl font-bold mb-[16px] text-center">
-          {userInfo.name || "yellres"}
+          {userInfo.name || "未登录"}
         </div>
 
         <div className="text-center mb-[16px]">
-          <Button size="mini" color="primary">
-            编辑信息
+          <Button
+            size="mini"
+            color="primary"
+            onClick={() => history.push("/login")}
+          >
+            {userInfo.email ? "编辑信息" : "立即登录"}
           </Button>
         </div>
       </div>
@@ -52,7 +55,15 @@ export default function UserPage() {
           }
         </Tabs> */}
 
-        <Card title="历史记录"></Card>
+        <List header="历史记录">
+          {
+            // [].map(historyInfo => (
+            //   <List.Item key={ } prefix={ } description={ }>
+            //     { historyInfo.content }
+            //   </List.Item>
+            // ))
+          }
+        </List>
       </div>
       {/* <AiSvg /> */}
     </div>
