@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .h1-primary {
+    @apply text-center m-3 text-lg font-bold;
+  }
+}
