@@ -9,6 +9,15 @@ export default defineConfig({
     { path: "/login", component: "@/pages/login", layout: false },
   ],
 
+  // proxy
+  proxy: {
+    "/api": {
+      target: "http://192.168.19.133:3000/",
+      changeOrigin: true,
+      pathRewrite: { "^/api": "" },
+    },
+  },
+
   plugins: [
     "@umijs/plugins/dist/request",
     "@umijs/plugins/dist/tailwindcss",

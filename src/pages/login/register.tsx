@@ -1,5 +1,8 @@
 import { Form, Button, Input } from "antd-mobile";
-import useBack, { HISTORY_CONST, THistory } from "./useBack";
+import useSendEmailCode from "./hooks/useSendEmailCode";
+import { getMailVerificationCodeRequest, verifyEmailCodeRequest } from "./api";
+import useBack, { HISTORY_CONST, THistory } from "./hooks/useBack";
+import { useState } from "react";
 
 type TBaseProps = {
   toNext: (nextHistory: THistory) => void;
@@ -7,8 +10,13 @@ type TBaseProps = {
 
 // 邮箱注册组件
 function RegisterWithEmail(props: TBaseProps) {
+  const { countDown, btnState, value, onChangeInAntd, reset, submitEmail } =
+    useSendEmailCode();
+
   const { toNext } = props;
-  const handleToNext = () => toNext(HISTORY_CONST[1]);
+  const handleSubmitEmail = async () => {
+    submitEmail();
+  };
 
   return (
     <>
@@ -16,13 +24,28 @@ function RegisterWithEmail(props: TBaseProps) {
       <Form
         layout="vertical"
         footer={
-          <Button block type="submit" color="primary" onClick={handleToNext}>
-            提交
+          <Button
+            block
+            type="submit"
+            color="primary"
+            onClick={handleSubmitEmail}
+            loading={btnState.isBtnLoading}
+            disabled={btnState.isBtnDisabled}
+          >
+            {btnState.isBtnDisabled
+              ? `请在${Math.round(countDown / 1000)}s后重试`
+              : "提交"}
           </Button>
         }
       >
         <Form.Item name="email" label="邮箱" rules={[{ required: true }]}>
-          <Input placeholder="清输入邮箱" clearable />
+          <Input
+            value={value}
+            onChange={onChangeInAntd}
+            onClear={reset}
+            placeholder="请输入邮箱"
+            clearable
+          />
         </Form.Item>
       </Form>
     </>
