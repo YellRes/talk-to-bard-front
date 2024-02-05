@@ -9,7 +9,11 @@ export default defineConfig({
     { path: "/login", component: "@/pages/login", layout: false },
   ],
 
-  plugins: ["@umijs/plugins/dist/request", "@umijs/plugins/dist/tailwindcss"],
+  plugins: [
+    "@umijs/plugins/dist/request",
+    "@umijs/plugins/dist/tailwindcss",
+    "@umijs/plugins/dist/dva",
+  ],
   // request 插件
   request: {
     dataField: "data",
@@ -33,7 +37,7 @@ export default defineConfig({
       landscapeWidth: 568,
     }),
   ],
-
+  dva: {},
   // 环境变量
   define: {
     "process.env": {
