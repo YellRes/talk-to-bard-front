@@ -4,7 +4,6 @@ import { history } from "umi";
 import classnames from "classnames";
 import { Button, Tabs, Card, List } from "antd-mobile";
 
-// import { ReactComponent as AiSvg } from '@/assets/svg/ai.svg'
 import styles from "./index.less";
 import type { IUser } from "@/types/user.d.ts";
 
@@ -65,7 +64,6 @@ export default function UserPage() {
           }
         </List>
       </div>
-      {/* <AiSvg /> */}
     </div>
   );
 }
