@@ -31,36 +31,37 @@ export default function useBack(initialVal: THistory) {
     setHistoryStack([...historyStackRef.current]);
   }
 
-  useEffect(() => {
-    /**
-     * 控制路由返回
-     */
-    function addStopHistory() {
-      history.pushState(
-        {
-          id: "stopBack",
-        },
-        "",
-        window.location.href,
-      );
-    }
-    addStopHistory();
+  /**
+   * 控制路由返回
+   */
+  function addStopHistory() {
+    history.pushState(
+      {
+        id: "stopBack",
+      },
+      "",
+      window.location.href,
+    );
+  }
 
-    function handlePopState(e: PopStateEvent) {
-      if (historyStack.length > 1) {
-        return Dialog.confirm({
-          content: "是否离开当前页面",
-          onConfirm: () => {
-            removeHistoryStack();
-          },
-          onCancel: () => {
-            addStopHistory();
-          },
-        });
-      }
-      history.go(-2);
-      return;
+  function handlePopState(e: PopStateEvent) {
+    if (historyStack.length > 1) {
+      return Dialog.confirm({
+        content: "是否离开当前页面",
+        onConfirm: () => {
+          removeHistoryStack();
+        },
+        onCancel: () => {
+          addStopHistory();
+        },
+      });
     }
+    history.go(-2);
+    return;
+  }
+
+  useEffect(() => {
+    addStopHistory();
     window.addEventListener("popstate", handlePopState);
 
     return () => window.removeEventListener("popstate", handlePopState);

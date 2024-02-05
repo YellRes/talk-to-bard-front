@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { FloatingPanel, Mask } from "antd-mobile";
 import styles from "./index.less";
-import ConfirmPassword from "./confirmPassword";
-import EnterPassword from "./enterPassword";
 import Register from "./register";
 
 const HEIGHT_MIN = window.innerHeight * 0.43;

@@ -38,11 +38,5 @@ export default defineConfig({
     }),
   ],
   dva: {},
-  // 环境变量
-  define: {
-    "process.env": {
-      API_KEY: "AIzaSyCGXhcgB10pNS5pfGmCLHSlp1j06QzS1nI",
-    },
-  },
   tailwindcss: {},
 });

@@ -1,5 +1,4 @@
 import { Form, Button, Input } from "antd-mobile";
-import {} from "umi";
 import useBack, { HISTORY_CONST, THistory } from "./useBack";
 
 type TBaseProps = {
