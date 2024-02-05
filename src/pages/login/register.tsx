@@ -48,14 +48,11 @@ function ConfirmVerificationCode(props: TBaseProps) {
 // 密码输入
 function EnterPassword(props: TBaseProps) {
   const { toNext } = props;
-  const handleToNext = () => {};
 
   return (
     <>
       <h1 className="h1-primary">输入密码</h1>
-      <Button block onClick={handleToNext}>
-        提交
-      </Button>
+      <Button block>提交</Button>
     </>
   );
 }
@@ -77,5 +74,6 @@ export default function Register() {
         return null;
     }
   };
+
   return <>{renderComponentByCurrentHistory()}</>;
 }

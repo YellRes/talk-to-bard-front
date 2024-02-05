@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog } from "antd-mobile";
 
 export const HISTORY_CONST = [
@@ -12,21 +12,23 @@ export default function useBack(initialVal: THistory) {
   const [historyStack, setHistoryStack] = useState<Array<THistory>>([
     initialVal,
   ]);
+  const historyStackRef = useRef<Array<THistory>>([]);
 
   /**
    * 添加路由记录
    * */
   function addHistoryStack(currentHistory: THistory) {
     historyStack.push(currentHistory);
-    setHistoryStack([...historyStack]);
+    historyStackRef.current = historyStack;
+    setHistoryStack([...historyStackRef.current]);
   }
 
   /**
    * 减少路由记录
    * */
   function removeHistoryStack() {
-    historyStack.pop();
-    setHistoryStack([...historyStack]);
+    historyStackRef.current = historyStackRef.current.slice(0, -1);
+    setHistoryStack([...historyStackRef.current]);
   }
 
   useEffect(() => {
@@ -43,12 +45,12 @@ export default function useBack(initialVal: THistory) {
       );
     }
     addStopHistory();
-    window.addEventListener("popstate", (event) => {
+
+    function handlePopState(e: PopStateEvent) {
       if (historyStack.length > 1) {
         return Dialog.confirm({
           content: "是否离开当前页面",
           onConfirm: () => {
-            // history.go(-2)
             removeHistoryStack();
           },
           onCancel: () => {
@@ -57,10 +59,12 @@ export default function useBack(initialVal: THistory) {
         });
       }
       history.go(-2);
-      removeHistoryStack();
       return;
-    });
-  }, []);
+    }
+    window.addEventListener("popstate", handlePopState);
+
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [historyStack]);
 
   return {
     historyStack,
