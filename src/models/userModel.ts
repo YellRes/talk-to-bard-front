@@ -1,17 +1,16 @@
 import { useRequest } from "ahooks";
+import { useState } from "react";
+import type { IUser } from "@/types/user";
 // import { getUser } from '@/services/user';
 
-export default function Page() {
-  const { data: user, loading: loading } = useRequest(async () => {
-    const res = await getUser();
-    if (res) {
-      return res;
-    }
-    return {};
+export default function UserModel() {
+  const [user, setUser] = useState<IUser & Record<string, any>>({
+    email: "",
   });
 
+  // const changeUser = useCallback(() => setCounter((c) => c + 1), []);
   return {
     user,
-    loading,
+    setUser,
   };
 }

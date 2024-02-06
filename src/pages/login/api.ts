@@ -6,6 +6,9 @@ export function getMailVerificationCodeRequest(email: string) {
     params: {
       email,
     },
+    otherAxiosConfig: {
+      customNotify: true,
+    },
   });
 }
 

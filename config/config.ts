@@ -22,6 +22,8 @@ export default defineConfig({
     "@umijs/plugins/dist/request",
     "@umijs/plugins/dist/tailwindcss",
     "@umijs/plugins/dist/dva",
+    "@umijs/plugins/dist/initial-state",
+    "@umijs/plugins/dist/model",
   ],
   // request 插件
   request: {
@@ -47,5 +49,7 @@ export default defineConfig({
     }),
   ],
   dva: {},
+  model: {},
+  initialState: {},
   tailwindcss: {},
 });
