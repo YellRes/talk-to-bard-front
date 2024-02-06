@@ -2,7 +2,7 @@ import { Toast } from "antd-mobile";
 import axios, { Axios, AxiosRequestConfig } from "axios";
 import { useModel } from "umi";
 
-axios.defaults.baseURL = process.env.SERVER_URL;
+// axios.defaults.baseURL = process.env.SERVER_URL;
 
 // 请求拦截器
 axios.interceptors.request.use((config) => {
@@ -13,39 +13,49 @@ axios.interceptors.request.use((config) => {
 
 // 响应拦截器
 axios.interceptors.response.use(
-  (config) => {
-    const { status } = config;
+  (response) => {
+    const { status } = response;
 
     if (status === 200) {
-      return config.data;
+      return response.data;
     } else {
       Toast.show({
         icon: "fail",
         content: "发生错误",
       });
-      return config;
+      return response;
     }
-
-    return config;
   },
   (error) => {
-    Toast.show({
-      position: "bottom",
-      content: "发生错误",
-    });
+    const { config } = error;
+    const {
+      response: { data },
+    } = error;
+    if (!config.customNotify) {
+      Toast.show({
+        position: "bottom",
+        content: "发生错误",
+      });
+    } else {
+      Toast.show({
+        position: "bottom",
+        content: data?.message || "请求错误",
+      });
+    }
+
     return Promise.reject(error);
   },
 );
 
 type RequestParamsType<T> = {
   params: T;
-  otherAxiosConfig?: AxiosRequestConfig;
+  otherAxiosConfig?: AxiosRequestConfig & Record<string, any>;
 };
 type RequestMethodType = Axios["get"] | Axios["post"];
 function createRequest(requestMethod: RequestMethodType) {
   return function <T>(url: string, config: RequestParamsType<T>) {
     const { params, otherAxiosConfig } = config;
-    requestMethod(url, {
+    return requestMethod(url, {
       params,
       ...otherAxiosConfig,
     });
