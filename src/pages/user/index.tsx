@@ -1,6 +1,6 @@
 // node_modules库
 import React, { useState } from "react";
-import { history } from "umi";
+import { history, useModel } from "umi";
 import classnames from "classnames";
 import { Button, Tabs, Card, List } from "antd-mobile";
 
@@ -9,6 +9,7 @@ import type { IUser } from "@/types/user.d.ts";
 
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState<Partial<IUser>>({});
+  const { user, setUser } = useModel("userModel");
 
   return (
     <div className={classnames(styles.user, ["bg-[#f0f2f5]", "flex-col"])}>
@@ -17,16 +18,12 @@ export default function UserPage() {
       >
         <div className="relative">
           <img
-            src={
-              userInfo.avatarUrl
-                ? userInfo.avatarUrl
-                : require("../../assets/yay.jpg")
-            }
+            src={require("../../assets/yay.jpg")}
             className="w-[100px] h-[100px] rounded-full mx-auto mt-[-30px]"
           />
         </div>
         <div className="text-2xl font-bold mb-[16px] text-center">
-          {userInfo.name || "未登录"}
+          {user.token ? user.name : "未登录"}
         </div>
 
         <div className="text-center mb-[16px]">
@@ -35,7 +32,7 @@ export default function UserPage() {
             color="primary"
             onClick={() => history.push("/login")}
           >
-            {userInfo.email ? "编辑信息" : "立即登录"}
+            {user.token ? "编辑信息" : "立即登录"}
           </Button>
         </div>
       </div>

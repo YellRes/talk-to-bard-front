@@ -1,30 +1,39 @@
+import { Cell, Input, Form, Button, Loading } from "react-vant";
 import { useState } from "react";
-import { FloatingPanel, Mask } from "antd-mobile";
-import styles from "./index.less";
-import Register from "./register";
+import { useEventTargetInAntd } from "@/core/hooks/useInAntd";
+import { ReactComponent as SvgAI } from "@/assets/svg/ai.svg";
 
-const HEIGHT_MIN = window.innerHeight * 0.43;
-const HEIGHT_MAX = window.innerHeight * 0.7;
-const anchors = [HEIGHT_MIN];
-
+// 登录页面
 export default function Login() {
-  const [isMaskOpen, setMaskOpen] = useState(true);
+  const [form] = Form.useForm();
+  const [isLoading, setLoading] = useState(true);
 
   return (
     <>
-      <img
-        className="mx-auto"
-        src={require("@/assets/chat.png")}
-        alt=""
-        width={"100%"}
-      />
+      <SvgAI className="mx-auto" />
+      <h3 className="h1-primary">登录</h3>
+      <Form
+        layout="vertical"
+        form={form}
+        footer={
+          <div style={{ margin: "16px 16px 0" }}>
+            <Button round nativeType="submit" type="primary" block>
+              登录
+            </Button>
+          </div>
+        }
+      >
+        <Form.Item name="email" label="邮箱">
+          <Input
+            placeholder="请输入邮箱"
+            suffix={isLoading && <Loading size="20" />}
+          />
+        </Form.Item>
 
-      {/* 邮箱 => 验证码 => 设置密码 */}
-      <FloatingPanel className="floatingPanel" anchors={anchors}>
-        <Register />
-      </FloatingPanel>
-
-      <Mask visible={isMaskOpen} className={styles.login_mask} />
+        <Form.Item name="password" label="密码">
+          <Input placeholder="请输入密码" />
+        </Form.Item>
+      </Form>
     </>
   );
 }

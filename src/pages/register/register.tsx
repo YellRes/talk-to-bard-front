@@ -3,15 +3,16 @@ import {
   PasswordInput,
   Input as VantInput,
   Button as VantButton,
+  Cell,
 } from "react-vant";
 import { useState } from "react";
-import { useModel } from "umi";
-import { useEventTarget } from "ahooks";
+import { useModel, history } from "umi";
+import { useEventTarget, useLocalStorageState } from "ahooks";
 
 import { useEventTargetInAntd } from "@/core/hooks/useInAntd";
 import useSendEmailCode from "./hooks/useSendEmailCode";
 import useBack, { HISTORY_CONST, THistory } from "./hooks/useBack";
-import { verifyEmailCodeRequest } from "./api";
+import { verifyEmailCodeRequest, registerRequest } from "./api";
 
 type TBaseProps = {
   toNext: (nextHistory: THistory) => void;
@@ -93,24 +94,50 @@ function EnterPassword(props: TBaseProps) {
     confirmPasswordVal,
     { onChange: onConfirmPasswordChange, ...changeAndResetConfirmPasswordVal },
   ] = useEventTargetInAntd({ initialValue: "" });
+  const [_, setLocalToken] = useLocalStorageState("token");
+  const { user, setUser } = useModel("userModel");
 
-  const completeRegistration = () => {};
+  const completeRegistration = async () => {
+    try {
+      let createdUser = await registerRequest(user.email, passwordVal!);
+      setLocalToken(createdUser.token);
+      setUser({
+        ...createdUser,
+      });
+      history.push("/user");
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   return (
     <>
       <h1 className="h1-primary">输入密码</h1>
-      <VantInput
-        placeholder="请输入密码"
-        value={passwordVal}
-        {...changeAndReset}
-      />
-      <VantInput
-        placeholder="再次输入密码"
-        value={confirmPasswordVal}
-        {...changeAndResetConfirmPasswordVal}
-      />
-      <VantButton type="primary" block round onClick={completeRegistration}>
-        完成注册
-      </VantButton>
+      <Cell>
+        <VantInput
+          placeholder="请输入密码"
+          type="password"
+          value={passwordVal}
+          onChange={changeAndReset.onChangeInAntd}
+          {...changeAndReset}
+        />
+      </Cell>
+
+      <Cell>
+        <VantInput
+          placeholder="再次输入密码"
+          type="password"
+          value={confirmPasswordVal}
+          onChange={changeAndResetConfirmPasswordVal.onChangeInAntd}
+          {...changeAndResetConfirmPasswordVal}
+        />
+      </Cell>
+
+      <Cell>
+        <VantButton type="primary" block round onClick={completeRegistration}>
+          完成注册
+        </VantButton>
+      </Cell>
     </>
   );
 }

@@ -48,21 +48,26 @@ axios.interceptors.response.use(
 );
 
 type RequestParamsType<T> = {
-  params: T;
+  params?: T;
   otherAxiosConfig?: AxiosRequestConfig & Record<string, any>;
 };
-type RequestMethodType = Axios["get"] | Axios["post"];
+type RequestMethodType = "post" | "get";
 function createRequest(requestMethod: RequestMethodType) {
-  return function <T>(url: string, config: RequestParamsType<T>) {
+  return function <T, R>(
+    url: string,
+    config: RequestParamsType<T>,
+  ): Promise<R> {
     const { params, otherAxiosConfig } = config;
-    return requestMethod(url, {
+    return axios.request({
+      url,
       params,
+      method: requestMethod,
       ...otherAxiosConfig,
     });
   };
 }
 
-const getRequest = createRequest(axios.get);
-const postRequest = createRequest(axios.post);
+const getRequest = createRequest("get");
+const postRequest = createRequest("post");
 
 export { getRequest, postRequest };

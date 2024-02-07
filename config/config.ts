@@ -6,6 +6,7 @@ export default defineConfig({
     { path: "/", redirect: "/index" },
     { path: "/index", component: "@/pages/index" },
     { path: "/user", component: "@/pages/user" },
+    { path: "/register", component: "@/pages/register", layout: false },
     { path: "/login", component: "@/pages/login", layout: false },
   ],
 
