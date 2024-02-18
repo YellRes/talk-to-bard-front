@@ -14,10 +14,13 @@ axios.interceptors.request.use((config) => {
 // 响应拦截器
 axios.interceptors.response.use(
   (response) => {
-    const { status } = response;
+    const { status, config } = response;
 
-    if (status === 200) {
-      return response.data;
+    if (status === 200 || status === 201) {
+      if (config?.notNormalRes) return response.data;
+      else {
+        return response.data.data;
+      }
     } else {
       Toast.show({
         icon: "fail",
