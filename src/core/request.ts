@@ -3,16 +3,17 @@ import axios, { Axios, AxiosRequestConfig } from "axios";
 import { useModel } from "umi";
 
 // axios.defaults.baseURL = process.env.SERVER_URL;
+const axiosInstance = axios.create({});
 
 // 请求拦截器
-axios.interceptors.request.use((config) => {
-  // const { user } = useModel("userModel");
-  // config.headers.Authorization = user.token ? `Bearer ${user.token}` : "";
+axiosInstance.interceptors.request.use((config) => {
+  const user: any = JSON.parse(localStorage.getItem("user") || "");
+  config.headers.Authorization = user?.token ? `Bearer ${user.token}` : "";
   return config;
 });
 
 // 响应拦截器
-axios.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     const { status, config } = response;
 
@@ -61,7 +62,7 @@ function createRequest(requestMethod: RequestMethodType) {
     config: RequestParamsType<T>,
   ): Promise<R> {
     const { params, otherAxiosConfig } = config;
-    return axios.request({
+    return axiosInstance.request({
       url,
       params,
       method: requestMethod,

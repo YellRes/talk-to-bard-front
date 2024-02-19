@@ -8,6 +8,7 @@ export default defineConfig({
     { path: "/user", component: "@/pages/user" },
     { path: "/register", component: "@/pages/register", layout: false },
     { path: "/login", component: "@/pages/login", layout: false },
+    { path: "/edit", component: "@/pages/edit", layout: false },
   ],
 
   // proxy

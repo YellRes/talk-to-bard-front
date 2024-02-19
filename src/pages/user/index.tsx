@@ -23,16 +23,16 @@ export default function UserPage() {
           />
         </div>
         <div className="text-2xl font-bold mb-[16px] text-center">
-          {user.token ? user.name : "未登录"}
+          {user?.token ? user.name : "未登录"}
         </div>
 
         <div className="text-center mb-[16px]">
           <Button
             size="mini"
             color="primary"
-            onClick={() => history.push("/login")}
+            onClick={() => history.push(user?.token ? "/edit" : "/login")}
           >
-            {user.token ? "编辑信息" : "立即登录"}
+            {user?.token ? "编辑信息" : "立即登录"}
           </Button>
         </div>
       </div>
