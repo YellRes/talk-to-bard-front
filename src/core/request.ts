@@ -7,7 +7,7 @@ const axiosInstance = axios.create({});
 
 // 请求拦截器
 axiosInstance.interceptors.request.use((config) => {
-  const user: any = JSON.parse(localStorage.getItem("user") || "");
+  const user: any = JSON.parse(localStorage.getItem("user") || "{}");
   config.headers.Authorization = user?.token ? `Bearer ${user.token}` : "";
   return config;
 });

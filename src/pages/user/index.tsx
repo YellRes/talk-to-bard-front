@@ -1,15 +1,35 @@
-// node_modules库
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { history, useModel } from "umi";
 import classnames from "classnames";
 import { Button, Tabs, Card, List } from "antd-mobile";
+import { Cell } from "react-vant";
 
 import styles from "./index.less";
 import type { IUser } from "@/types/user.d.ts";
+import { getAllHistoryRequest } from "../api";
 
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState<Partial<IUser>>({});
   const { user, setUser } = useModel("userModel");
+  const [chatHistory, setHistory] = useState<Record<string, any>[]>([]);
+
+  useEffect(() => {
+    (async function () {
+      let res = await getAllHistoryRequest(user!.id);
+      setHistory(res || []);
+    })();
+  }, []);
+
+  const jumpToIndex = ({ title }: any) => {
+    history.push(
+      {
+        pathname: "/index",
+      },
+      {
+        title,
+      },
+    );
+  };
 
   return (
     <div className={classnames(styles.user, ["bg-[#f0f2f5]", "flex-col"])}>
@@ -51,15 +71,20 @@ export default function UserPage() {
           }
         </Tabs> */}
 
-        <List header="历史记录">
-          {
-            // [].map(historyInfo => (
-            //   <List.Item key={ } prefix={ } description={ }>
-            //     { historyInfo.content }
-            //   </List.Item>
-            // ))
-          }
-        </List>
+        <div className="h1-primary text-left">历史记录</div>
+        <Cell.Group>
+          {chatHistory.length
+            ? chatHistory.map((historyInfo) => (
+                <Cell
+                  key={historyInfo.title}
+                  isLink
+                  onClick={() => jumpToIndex({ title: historyInfo.title })}
+                >
+                  <p className="truncate">{historyInfo.title}</p>
+                </Cell>
+              ))
+            : ""}
+        </Cell.Group>
       </div>
     </div>
   );

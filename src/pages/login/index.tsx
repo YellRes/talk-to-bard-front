@@ -24,12 +24,16 @@ export default function Login() {
 
   async function onFinish() {
     setLoading(true);
-    let loginInfo = await loginRequest({
-      email: emailVal!,
-      password: passwordVal!,
-    });
-    setUser(loginInfo);
-    history.push("/user");
+    try {
+      let loginInfo = await loginRequest({
+        email: emailVal!,
+        password: passwordVal!,
+      });
+      setUser(loginInfo);
+      history.push("/user");
+    } catch (e) {
+      console.log(e);
+    }
 
     setLoading(false);
   }

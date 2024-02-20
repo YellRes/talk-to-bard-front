@@ -1,7 +1,22 @@
-import { ProChat } from "@ant-design/pro-chat";
+import { ProChat, ProChatInstance } from "@ant-design/pro-chat";
+import { useModel, useLocation } from "umi";
+import { useRef, useEffect } from "react";
+
 import { multiChatParams, multipleChatRequest } from "../util/request";
+import { createHistoryRequest } from "./api";
 
 export default function HomePage() {
+  const { user, setUser } = useModel("userModel");
+  const proChatRef = useRef<ProChatInstance>();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (proChatRef) {
+      proChatRef.current?.sendMessage(location.state?.title);
+    }
+  }, [proChatRef]);
+
+  const historyInfo = useRef("");
   const requestBard = async (
     messages: Array<{ content: string; [x: string]: string }>,
   ) => {
@@ -13,6 +28,16 @@ export default function HomePage() {
         if (index === messages.length - 1) {
           // 当前消息
           pre.currentParts = content;
+          if (messages.length > 1) {
+          } else {
+            createHistoryRequest({
+              userId: user!.id,
+              title: content,
+              contents: [],
+            }).then((res: any) => {
+              historyInfo.current = res.id;
+            });
+          }
         } else {
           // 历史消息
           pre.history.push({
@@ -54,6 +79,7 @@ export default function HomePage() {
 
   return (
     <ProChat
+      chatRef={proChatRef}
       helloMessage={"新的一天，有什么我可以帮你的~~"}
       displayMode={"docs"}
       request={requestBard}

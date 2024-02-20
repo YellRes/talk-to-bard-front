@@ -50,6 +50,12 @@ export default defineConfig({
       landscapeWidth: 568,
     }),
   ],
+
+  define: {
+    "process.env": {
+      API_KEY: "AIzaSyCGXhcgB10pNS5pfGmCLHSlp1j06QzS1nI",
+    },
+  },
   dva: {},
   model: {},
   initialState: {},
