@@ -36,10 +36,10 @@ export default function UserPage() {
       <div
         className={classnames(styles.top_userInfo, ["bg-[#fff]", "mt-[50px]"])}
       >
-        <div className="relative">
+        <div className="relative text-center">
           <img
             src={require("../../assets/yay.jpg")}
-            className="w-[100px] h-[100px] rounded-full mx-auto mt-[-30px]"
+            className="w-[100px] h-[100px] rounded-full  mt-[-30px]"
           />
         </div>
         <div className="text-2xl font-bold mb-[16px] text-center">

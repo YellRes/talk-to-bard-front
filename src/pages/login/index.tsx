@@ -40,7 +40,9 @@ export default function Login() {
 
   return (
     <>
-      <SvgAI className="mx-auto" />
+      <div className="text-center">
+        <SvgAI className="mx-auto" />
+      </div>
       <h3 className="h1-primary">登录</h3>
       <Form
         layout="vertical"

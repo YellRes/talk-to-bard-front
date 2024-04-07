@@ -1,12 +1,17 @@
 import { ProChat, ProChatInstance } from "@ant-design/pro-chat";
 import { useModel, useLocation } from "umi";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { Button, Popup, Radio } from "react-vant";
+import { Exchange } from "@react-vant/icons";
 
 import { multiChatParams, multipleChatRequest } from "../util/request";
 import { createHistoryRequest } from "./api";
 
 export default function HomePage() {
   const { user, setUser } = useModel("userModel");
+  const [isShowPopup, setShowPopup] = useState(false);
+  // 大模型工具 spark gemini
+  const [modelName, setModelName] = useState("spark");
   const proChatRef = useRef<ProChatInstance>();
   const location = useLocation();
 
@@ -77,12 +82,55 @@ export default function HomePage() {
     }
   };
 
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
   return (
-    <ProChat
-      chatRef={proChatRef}
-      helloMessage={"新的一天，有什么我可以帮你的~~"}
-      displayMode={"docs"}
-      request={requestBard}
-    />
+    <>
+      {/* 悬浮按钮 切换大模型 */}
+      <div className="fixed right-0 top-[50%] translate-y-[-50%]">
+        <Button
+          size="small"
+          icon={<Exchange />}
+          type="primary"
+          onClick={handleOpenPopup}
+        />
+      </div>
+
+      <Popup
+        className="p-2 pb-8"
+        visible={isShowPopup}
+        position="bottom"
+        onClose={() => setShowPopup(false)}
+      >
+        <h3>选择对应的大模型</h3>
+        <Radio.Group
+          direction="vertical"
+          value={modelName}
+          onChange={(val) => setModelName(val)}
+        >
+          <Radio name={"spark"}>讯飞星火</Radio>
+          <Radio name={"gemini"}>google gemini(需要梯子)</Radio>
+        </Radio.Group>
+
+        <Button
+          className="mt-4"
+          size="small"
+          type="primary"
+          block
+          round
+          onClick={() => setShowPopup(false)}
+        >
+          确定
+        </Button>
+      </Popup>
+      <ProChat
+        chatRef={proChatRef}
+        helloMessage={"新的一天，有什么我可以帮你的~~"}
+        displayMode={"docs"}
+        request={requestBard}
+      />
+    </>
   );
 }
