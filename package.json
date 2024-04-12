@@ -20,6 +20,7 @@
     "antd-style": "^3.6.1",
     "axios": "^1.6.7",
     "classnames": "^2.5.1",
+    "crypto-js": "^4.2.0",
     "react-vant": "^3.3.3",
     "svg-sprite-loader": "^6.0.11",
     "umi": "^4.1.1"

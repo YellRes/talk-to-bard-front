@@ -1,9 +1,9 @@
 import { Badge, TabBar } from "antd-mobile";
 import { AppOutline, UserOutline } from "antd-mobile-icons";
-import { Outlet, useLocation, history } from "umi";
+import { Outlet, useLocation, history, connect } from "umi";
 import styles from "./index.less";
 
-export default function Layout() {
+function Layout(props: any) {
   const location = useLocation();
   const { pathname } = location;
 
@@ -41,3 +41,5 @@ export default function Layout() {
     </div>
   );
 }
+
+export default connect((modelInfo: any) => modelInfo.userInfo)(Layout);

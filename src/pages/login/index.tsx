@@ -1,13 +1,13 @@
 import { Cell, Input, Form, Button, Loading } from "react-vant";
-import { useState } from "react";
-import { useModel, history } from "umi";
+import { useEffect, useState } from "react";
+import { history, connect } from "umi";
 import { useEventTargetInAntd } from "@/core/hooks/useInAntd";
 import { ReactComponent as SvgAI } from "@/assets/svg/ai.svg";
 
 import { loginRequest } from "./api";
 
 // 登录页面
-export default function Login() {
+function Login(props: any) {
   const [form] = Form.useForm();
   const [isLoading, setLoading] = useState(false);
   const [emailVal, { onChangeInAntd: onChangeEmail, reset: resetEmail }] =
@@ -20,7 +20,13 @@ export default function Login() {
   ] = useEventTargetInAntd({
     initialValue: "",
   });
-  const { user, setUser } = useModel("userModel");
+
+  useEffect(() => {
+    props.dispatch({
+      type: "userInfo/save",
+      payload: {},
+    });
+  }, []);
 
   async function onFinish() {
     setLoading(true);
@@ -29,7 +35,11 @@ export default function Login() {
         email: emailVal!,
         password: passwordVal!,
       });
-      setUser(loginInfo);
+
+      props.dispatch({
+        type: "userInfo/save",
+        payload: loginInfo,
+      });
       history.push("/user");
     } catch (e) {
       console.log(e);
@@ -93,3 +103,5 @@ export default function Login() {
     </>
   );
 }
+
+export default connect((model: any) => model.userInfo)(Login);

@@ -1,6 +1,6 @@
 import { Toast } from "antd-mobile";
 import axios, { Axios, AxiosRequestConfig } from "axios";
-import { useModel } from "umi";
+import { handleAuthExpired } from "./handleError";
 
 // axios.defaults.baseURL = process.env.SERVER_URL;
 const axiosInstance = axios.create({});
@@ -16,7 +16,6 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (response) => {
     const { status, config } = response;
-
     if (status === 200 || status === 201) {
       if (config?.notNormalRes) return response.data;
       else {
@@ -32,9 +31,13 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     const { config } = error;
+
     const {
-      response: { data },
+      response: { data, status },
     } = error;
+    if (status === 401) {
+      return handleAuthExpired();
+    }
     if (!config.customNotify) {
       Toast.show({
         position: "bottom",

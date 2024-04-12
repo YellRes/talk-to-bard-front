@@ -53,7 +53,10 @@ export default defineConfig({
 
   define: {
     "process.env": {
-      API_KEY: "AIzaSyCGXhcgB10pNS5pfGmCLHSlp1j06QzS1nI",
+      API_KEY: "AIzaSyBuhdie0c1SSe2MeRaYV75S94aDwKV64P8",
+      APP_ID_SPARK: "26af466f",
+      API_SECRET_SPARK: "NDIxODhiMzUyYzE0YzhkYzI0NjUxY2Q1",
+      API_KEY_SPARK: "8ac111ba902c1ce3b10ee3c1cc3b9ffd",
     },
   },
   dva: {},
