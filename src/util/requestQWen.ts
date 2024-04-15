@@ -23,7 +23,9 @@ export async function requestQwen(params: any) {
               ...params,
             ],
           },
-          parameters: {},
+          parameters: {
+            incremental_output: true,
+          },
         }),
       },
     );
