@@ -18,6 +18,11 @@ export default defineConfig({
       changeOrigin: true,
       pathRewrite: { "^/api": "" },
     },
+    "/qWenApi": {
+      target: "https://dashscope.aliyuncs.com/",
+      changeOrigin: true,
+      pathRewrite: { "^/qWenApi": "/api" },
+    },
   },
 
   plugins: [
@@ -57,6 +62,7 @@ export default defineConfig({
       APP_ID_SPARK: "26af466f",
       API_SECRET_SPARK: "NDIxODhiMzUyYzE0YzhkYzI0NjUxY2Q1",
       API_KEY_SPARK: "8ac111ba902c1ce3b10ee3c1cc3b9ffd",
+      API_KEY_QWEN: "sk-64fe5d7794774632a0501292632d1395",
     },
   },
   dva: {},

@@ -5,13 +5,14 @@ import { Button, Popup, Radio } from "react-vant";
 import { Exchange } from "@react-vant/icons";
 
 import { multiChatParams, multipleChatRequest } from "../util/request";
+import { requestQwen } from "@/util/requestQWen";
 import { createHistoryRequest } from "./api";
 
 export default function HomePage() {
   const { user, setUser } = useModel("userModel");
   const [isShowPopup, setShowPopup] = useState(false);
   // 大模型工具 spark gemini
-  const [modelName, setModelName] = useState("spark");
+  const [modelName, setModelName] = useState("aliQwen");
   const proChatRef = useRef<ProChatInstance>();
   const location = useLocation();
 
@@ -22,7 +23,7 @@ export default function HomePage() {
   }, [proChatRef]);
 
   const historyInfo = useRef("");
-  const requestBard = async (
+  const requestLLm = async (
     messages: Array<{ content: string; [x: string]: string }>,
   ) => {
     // 获取历史消息和本次消息
@@ -59,22 +60,61 @@ export default function HomePage() {
     );
 
     try {
-      let res = await multipleChatRequest(multiChatContent);
+      let res: any = await (modelName === "aliQwen"
+        ? requestQwen(messages)
+        : multipleChatRequest(multiChatContent));
+
+      let readableStream = null;
       const encoder = new TextEncoder();
-      const readableStream = new ReadableStream({
-        async start(controller) {
-          for await (const chunk of res) {
-            try {
-              const chunkText = chunk.text();
-              controller.enqueue(encoder.encode(chunkText));
-            } catch (err) {
-              console.error("读取流中的数据时发生错误", err);
-              controller.error(err);
+      const decoder = new TextDecoder();
+
+      if (modelName !== "aliQwen") {
+        readableStream = new ReadableStream({
+          async start(controller) {
+            for await (const chunk of res) {
+              try {
+                const chunkText = chunk.text();
+                controller.enqueue(encoder.encode(chunkText));
+              } catch (err) {
+                console.error("读取流中的数据时发生错误", err);
+                controller.error(err);
+              }
             }
-          }
-          controller.close();
-        },
-      });
+            controller.close();
+          },
+        });
+      } else {
+        const reader = res.body.getReader();
+        // 通义千问
+        readableStream = new ReadableStream({
+          async start(controller) {
+            function push() {
+              reader
+                .read()
+                .then(({ done, value }) => {
+                  if (done) {
+                    controller.close();
+                    return;
+                  }
+                  const chunk = decoder.decode(value, { stream: true });
+                  const message = chunk.replace(
+                    /id:[0-9]\nevent:result\n:HTTP_STATUS\/200\ndata:/,
+                    "",
+                  );
+                  const parsed = JSON.parse(message);
+                  controller.enqueue(encoder.encode(parsed.output.text));
+                  push();
+                })
+                .catch((err) => {
+                  console.error("读取流中的数据时发生错误", err);
+                  controller.error(err);
+                });
+            }
+            push();
+          },
+        });
+      }
+
       return new Response(readableStream);
     } catch (e) {
       console.warn(e);
@@ -110,7 +150,7 @@ export default function HomePage() {
           value={modelName}
           onChange={(val) => setModelName(val)}
         >
-          <Radio name={"spark"}>讯飞星火</Radio>
+          <Radio name={"aliQwen"}>通义千问(阿里)</Radio>
           <Radio name={"gemini"}>google gemini(需要梯子)</Radio>
         </Radio.Group>
 
@@ -129,7 +169,7 @@ export default function HomePage() {
         chatRef={proChatRef}
         helloMessage={"新的一天，有什么我可以帮你的~~"}
         displayMode={"docs"}
-        request={requestBard}
+        request={requestLLm}
       />
     </>
   );
