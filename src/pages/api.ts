@@ -1,7 +1,7 @@
 import { getRequest, postRequest } from "@/core/request";
 
 interface ICreateHistory {
-  userId: number;
+  userId: string;
   title: string;
   contents: Array<{
     role: "user" | "model";
