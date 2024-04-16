@@ -11,3 +11,11 @@
 - 后端： nestjs + prisma + mysql
 
 ## Demo演示
+![图片](/asset/talktoGemini_demo.gif)
+
+
+## 运行
+```shell
+pnpm i
+pnpm run dev
+```
