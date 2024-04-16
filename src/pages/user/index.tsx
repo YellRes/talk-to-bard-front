@@ -15,6 +15,7 @@ export default function UserPage() {
 
   useEffect(() => {
     (async function () {
+      if (!user?.email) return;
       let res = await getAllHistoryRequest(user!.id);
       setHistory(res || []);
     })();
@@ -72,19 +73,22 @@ export default function UserPage() {
         </Tabs> */}
 
         <div className="h1-primary text-left">历史记录</div>
-        <Cell.Group>
-          {chatHistory.length
-            ? chatHistory.map((historyInfo) => (
-                <Cell
-                  key={historyInfo.title}
-                  isLink
-                  onClick={() => jumpToIndex({ title: historyInfo.title })}
-                >
-                  <p className="truncate">{historyInfo.title}</p>
-                </Cell>
-              ))
-            : ""}
-        </Cell.Group>
+
+        {chatHistory.length ? (
+          <List>
+            {chatHistory.map((historyInfo) => (
+              <Cell
+                key={historyInfo.title}
+                isLink
+                onClick={() => jumpToIndex({ title: historyInfo.title })}
+              >
+                <div className="truncate">{historyInfo.title}</div>
+              </Cell>
+            ))}
+          </List>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

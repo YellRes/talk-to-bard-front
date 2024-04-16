@@ -8,7 +8,7 @@ export default class BaseLLam<T, P, R> {
 
   getRequestParams(params: ChatMessage[]) {}
 
-  async request(params: P): Promise<Response> {
+  async request(params: ChatMessage[]): Promise<Response> {
     return new Response("");
   }
 

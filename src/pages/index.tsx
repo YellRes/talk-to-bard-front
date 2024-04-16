@@ -35,8 +35,15 @@ export default function HomePage() {
 
   const historyInfo = useRef("");
   const requestLLm = async (messages: ChatMessage[]) => {
-    // 获取历史消息和本次消息
     try {
+      // 创建对话记录
+      if (messages.length === 1 && user?.id) {
+        createHistoryRequest({
+          userId: user!.id,
+          title: messages[0].content as string,
+          contents: [],
+        });
+      }
       return await currentModel.request(messages);
     } catch (e) {
       console.warn(e);

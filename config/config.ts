@@ -14,7 +14,7 @@ export default defineConfig({
   // proxy
   proxy: {
     "/api": {
-      target: "http://192.168.19.133:3000/",
+      target: "http://120.27.131.228:3000/",
       changeOrigin: true,
       pathRewrite: { "^/api": "" },
     },
@@ -55,6 +55,7 @@ export default defineConfig({
       landscapeWidth: 568,
     }),
   ],
+  esbuildMinifyIIFE: true,
 
   define: {
     "process.env": {
