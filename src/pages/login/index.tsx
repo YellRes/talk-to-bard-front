@@ -48,6 +48,10 @@ function Login(props: any) {
     setLoading(false);
   }
 
+  function toRegister() {
+    history.push("/register");
+  }
+
   return (
     <>
       <div className="text-center">
@@ -69,6 +73,10 @@ function Login(props: any) {
             >
               登录
             </Button>
+
+            <div className="mt-[4px] text-center" onClick={toRegister}>
+              没有账号，去注册
+            </div>
           </div>
         }
       >
